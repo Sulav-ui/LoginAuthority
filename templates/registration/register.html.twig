@@ -4,16 +4,27 @@
 
 {% block body %}
     <h1>Register</h1>
-<form method="post" action="{{path('app_register')}}">
-
-    {{form_widget(registrationForm)}}
-    {# {{ form_start(registrationForm) }}
+    
+{# <form method="post" action="{{path('app_register')}}"> #}
+     <div style='margin:25px'>
+    
+     {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
+        <br>
+        {{ form_row(registrationForm.address) }}
+        <br>
+        {{ form_row(registrationForm.Password, {
          label:'Password'
         }) }}
-        {{ form_row(registrationForm.agreeTerms) }}  
-    {{ form_end(registrationForm) }} #}
-    <input type="submit" name="submit" value="Register">
+        <br>
+        
+        {{ form_row(registrationForm.agreeTerms) }} 
+        <br>
+         {{ form_row(registrationForm.Images) }}
+         <br>
+    {{ form_end(registrationForm) }} 
+    <br>
+    {# <input type="submit" name="submit" value="Register"> #}
  </form>
+ </div>
 {% endblock %}

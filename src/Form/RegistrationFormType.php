@@ -8,7 +8,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
@@ -23,7 +25,7 @@ class RegistrationFormType extends AbstractType
             ->add('email',EmailType::class,['attr'=>['class'=>'form-control']])
             
             ->add('address',EntityType::class,['class'=> Address::class])
-            ->add('plainPassword', PasswordType::class, [
+            ->add('Password', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'mapped' => false,
@@ -49,6 +51,10 @@ class RegistrationFormType extends AbstractType
                 ],
                 'attr' => ['class'=>'form-check-input'],
             ])
+            ->add('Images', FileType::class,[
+                'mapped' => false,
+                'attr' => ['class'=>'form-control-file']])
+            ->add('submit', SubmitType::class)
             
         ;
     }

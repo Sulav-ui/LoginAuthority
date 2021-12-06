@@ -7,11 +7,13 @@ use App\Form\RegistrationFormType;
 use App\Security\AppCustomAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\Validator\Constraints\Uuid;
 
 class RegistrationController extends AbstractController
 {
@@ -23,22 +25,29 @@ class RegistrationController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // dump($user);
-            // encode the plain password
+            // encode the password
             $user->setPassword(
             $userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('plainPassword')->getData()
+                    $form->get('Password')->getData()
                 )
             );
-
+            //for uploading file
+            /** @var UploadedFile $file */
+            $file=$request->files->get('registration_form') ['Images'];
+            //dump($request);
+            //dump($user);
+            $upload_directory=$this->getParameter('uploads_directory');
+            $filename=md5(uniqid()) . '.' . $file->guessExtension();
+            $file->move($upload_directory,$filename);
+            $user->setImage($filename);
             
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
 
              $userAuthenticator->authenticateUser(
-                $user,
+              $user,
                 $authenticator,
                 $request
             );
@@ -62,13 +71,15 @@ class RegistrationController extends AbstractController
     }
     
     #[Route('/user', name: 'user')]
-    public function homepage(){
+    public function homepage( EntityManagerInterface $entityManager,){
         $user = new User();
+
+        $entities = $entityManager->getRepository(User::class)->findAll();
 
         // $Form = $this->createForm(UserType::class, $user);/
           return $this->render('homepage/home.html.twig',[
 
-              'user'=>"Hello from controller"
+              'results'=>$entities,
           ]);
     }
 }

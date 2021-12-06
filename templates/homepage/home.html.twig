@@ -3,6 +3,27 @@
 {% block title %}Homepage{% endblock %}
 
 {% block body %}
-    {{user}}
-    {{app.user.email}} 
+    
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Id</th>
+      <th scope="col">Email</th>
+      <th scope="col">Image</th>
+      
+    </tr>
+  </thead>
+  
+ <tbody>
+ {% for result in results %}
+    <tr>
+      <th scope="row">{{result.id}}</th>
+      <td>{{result.Email}}</td>
+      <td><img src={{ '/upload/' ~ result.image}}  class="img-thumbnail" width="10%" height="50px"></td>
+      {# <td>{{result.image}}</td> #}
+    </tr>
+     {%endfor%}
+  </tbody>
+</table>
+   
 {% endblock %}
