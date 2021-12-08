@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -47,6 +49,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $image;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Skills", mappedBy="user", cascade={"persist"})
+     */
+    private $skills;
+
+    public function __construct()
+    {
+        $this->skills = new ArrayCollection();
+    }
 
     
 
@@ -140,6 +152,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setImage(string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Skills[]
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skills $skill): self
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills[] = $skill;
+            $skill->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skills $skill): self
+    {
+        if ($this->skills->removeElement($skill)) {
+            // set the owning side to null (unless already changed)
+            if ($skill->getUser() === $this) {
+                $skill->setUser(null);
+            }
+        }
 
         return $this;
     }

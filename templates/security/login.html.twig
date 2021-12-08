@@ -3,16 +3,28 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
+<div class="container">
+ <div class="row h-100 justify-content-center align-items-center">
+  <div class="col-10 col-md-8 col-lg-6">
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-    <label for="inputEmail">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <div class="form-group">
+        <label for="inputEmail">Email</label>
+        <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+    </div>
+    <div class="form-group">
+        <label for="inputPassword">Password</label>
+            <div class="input-group">
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password"  data-toggle="password" required>
+                 <div class="input-group-append">
+                    <div class="input-group-text"><i class="fa fa-eye"></i></div>
+                 </div>
+            </div>        
 
+    </div>
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
     >
@@ -29,7 +41,7 @@
     #}
 
 <br>
-    <button class="btn btn-lg btn-primary" type="submit">
+    <button class="btn btn-primary" type="submit">
         Login
     </button>
    
@@ -37,6 +49,7 @@
 <br>
      <a href="{{path('app_register')}}" class="btn btn-primary">Register</a>
 
-
-
+  </div>   
+ </div> 
+</div>
 {% endblock %}

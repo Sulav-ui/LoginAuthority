@@ -3,15 +3,18 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
+<div class="container">
+ <div class="row h-100 justify-content-center align-items-center">
+  <div class="col-10 col-md-8 col-lg-6">
     <h1>Register</h1>
     
 {# <form method="post" action="{{path('app_register')}}"> #}
-     <div style='margin:25px'>
     
      {{ form_start(registrationForm) }}
         {{ form_row(registrationForm.email) }}
         <br>
         {{ form_row(registrationForm.address) }}
+        {#<a href="javascript:void(0)" class="float-end btn btn-primary">ADD ADDRESS</a>#}
         <br>
         {{ form_row(registrationForm.Password, {
          label:'Password'
@@ -22,9 +25,30 @@
         <br>
          {{ form_row(registrationForm.Images) }}
          <br>
-    {{ form_end(registrationForm) }} 
-    <br>
+         {# render each row and field in the embedded form, in this example it's rendering the Skills fields as rows #}
+        
+        <div class="col-sm-8 col-sm-offset-2" id="exp_list" data-prototype="{{ form_widget(registrationForm.Skills.vars.prototype)|e('html_attr') }}">
+            <fieldset>
+            <legend>Skills</legend>
+            {% for row in registrationForm.Skills %}
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <strong>{{ row.vars.value.name }}</strong>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_row(row) }}
+                        <br>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        </fieldset>
+        <br>
+   {{ form_end(registrationForm) }} 
+
     {# <input type="submit" name="submit" value="Register"> #}
  </form>
+    </div>
+  </div>    
  </div>
 {% endblock %}

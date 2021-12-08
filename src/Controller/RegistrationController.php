@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Skills;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\AppCustomAuthenticator;
@@ -20,9 +21,12 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, AppCustomAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
-        $user = new User();
+        $user = new User();       
+        $skills=new Skills(); 
+        $user->addSkill($skills);
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the password
@@ -41,10 +45,10 @@ class RegistrationController extends AbstractController
             $filename=md5(uniqid()) . '.' . $file->guessExtension();
             $file->move($upload_directory,$filename);
             $user->setImage($filename);
-            
+
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
+            
 
              $userAuthenticator->authenticateUser(
               $user,
